@@ -4,6 +4,6 @@ from django.template import loader
 from .models import Tournament
 
 def home(request):
-    tourneys = Tournament.objects.all()
+    tourneys = Tournament.objects.order_by("startDate")
     output = {'tourneys': tourneys}
     return render(request, 'TabCenterApp/home.html', output)
