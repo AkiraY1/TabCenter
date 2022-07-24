@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-%85(btoo-odtmbkn^#6nikx(--u)jr88-ylzcpke6*6gquuw@k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '0.0.0.0',
@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'TabCenter.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR + '/' + 'db.sqlite3',
     }
 }
 
@@ -133,9 +133,9 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static')
-)
+#STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'static')
+#)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
