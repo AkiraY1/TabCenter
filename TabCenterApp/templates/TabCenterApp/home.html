@@ -13,7 +13,7 @@
     <tbody>
         {% for x in tourneys %}
             <tr>
-                <td>{{ x.name }}</td>
+                <td><a href="{% url 'tournament' x.id %}">{{ x.name }}</a></td>
                 <td>{{ x.startDate }}</td>
                 <td>{{ x.endDate }}</td>
             </tr>
