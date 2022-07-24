@@ -5,3 +5,8 @@ class User(models.Model):
     email = models.EmailField("email")
     personType = models.BooleanField("personType")
     password = models.CharField("password", max_length=60)
+
+class Tournament(models.Model):
+    name = models.CharField("name", max_length=60)
+    startDate = models.DateField("startDate")
+    endDate = models.DateField("endDate")
