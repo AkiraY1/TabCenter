@@ -84,14 +84,7 @@ WSGI_APPLICATION = 'TabCenter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES = {
-    "default": {
-        "ENGINE" : "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3")
-    }
-}
-DATABASES['default'].update(db_from_env)
+DATABASES = {'default': dj_database_url.parse("postgres://lajqwajascdeoc:ba968bf42fa2debbcfbfb45f384b580d6cef6e653310ec33210e710bc493b58b@ec2-44-206-214-233.compute-1.amazonaws.com:5432/dah70t9u9dkr3p")}
 
 #db_from_env = dj_database_url.config(conn_max_age=600)
 #DATABASES['default'].update(db_from_env)
