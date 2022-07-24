@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     'localhost',
     '127.0.0.1',
-    'quiet-tor-05804.herokuapp.com'
+    'quiet-tor-05804.herokuapp.com',
 ]
 
 
@@ -85,8 +85,12 @@ WSGI_APPLICATION = 'TabCenter.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + '/' + 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dah70t9u9dkr3p',
+        'USER': 'lajqwajascdeoc',
+        'PASSWORD': 'ba968bf42fa2debbcfbfb45f384b580d6cef6e653310ec33210e710bc493b58b',
+        'HOST': 'ec2-44-206-214-233.compute-1.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
