@@ -19,5 +19,9 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('TabCenterApp.urls')),
     path('admin/', admin.site.urls),
-    path('tournament/<int:tournament_id>/', include('TabCenterApp.urls'))
+    path('tournament/<int:tournament_id>/', include('TabCenterApp.urls')),
+    path('login/', include('TabCenterApp.urls')),
+    path('logout/', include('TabCenterApp.urls')),
+    path('signup/', include('TabCenterApp.urls')),
+    path('account/', include('TabCenterApp.urls')),
 ]
