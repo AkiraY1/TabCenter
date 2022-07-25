@@ -2,9 +2,19 @@
 
 {% block content %}
 
-    Email: {{ user.email }}
-    Name: {{ user.name }}
-    Paradigm: {{ user.paradigm }}
-    Institution: {{ user.institution }}
+    Email: {{ user.email }} <br>
+    Name: {{ user.name }} <br>
+    Paradigm: {{ user.paradigm }} <br>
+    Institution: {{ user.institution }} <br>
+
+    <h2>Update Profile</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" placeholder={{ user.name }}>
+        <label for="paradigm">Paradigm</label>
+        <textarea type="text" name="paradigm" id="paradigm" placeholder={{ user.paradigm }}> {{ user.paradigm }} </textarea>
+        <button type="submit">Save</button>
+    </form>
 
 {% endblock content %}
