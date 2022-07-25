@@ -10,7 +10,7 @@ def home(request):
         tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament))
     else:
         try:
-            tourneys = Tournament.objects.order_by("startDate")
+            tourneys = Tournament.objects.order_by("-startDate") #Remove - to reverse order
         except:
             raise Http404("Error: No tournaments can be found.")
     output = {'tourneys': tourneys}
