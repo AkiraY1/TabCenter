@@ -24,4 +24,6 @@ urlpatterns = [
     path('logout/', include('TabCenterApp.urls')),
     path('signup/', include('TabCenterApp.urls')),
     path('account/', include('TabCenterApp.urls')),
+    path('password-reset/', include('TabCenterApp.urls')),
+    path('password-reset-submit/', include('TabCenterApp.urls')),
 ]

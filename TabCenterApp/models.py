@@ -4,12 +4,6 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
-#class User(models.Model):
-#    username = models.CharField("username", max_length=30)
-#    email = models.EmailField("email")
-#    personType = models.BooleanField("personType")
-#    password = models.CharField("password", max_length=60)
-
 class Tournament(models.Model):
     name = models.CharField("name", max_length=60)
     startDate = models.DateField("startDate")
@@ -69,3 +63,8 @@ class TabCenterUser(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+class password_reset_code(models.Model):
+    email = models.CharField("email", max_length=255)
+    code = models.CharField("code", max_length=50)
+    time = models.TimeField(auto_now=True)

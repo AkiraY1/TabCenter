@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.template import loader
-from .models import Tournament
+from .models import Tournament, password_reset_code
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,6 +10,8 @@ from TabCenterApp.models import TabCenterUser
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
+import uuid
 
 def home(request):
     search_tournament = request.GET.get('search')
@@ -77,3 +79,36 @@ def account(request):
         request.user.save()
         return render(request, 'TabCenterApp/account.html')
     return render(request, 'TabCenterApp/account.html')
+
+def password_reset(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        if (email != '') and not (not TabCenterUser.objects.filter(email=email)):
+            hash = uuid.uuid4().hex
+            h = password_reset_code(email=email, code=hash)
+            h.save()
+            send_mail(
+                'TabCenter Password Change',
+                f'Your code is: {hash}. Enter it on the webpage.',
+                'meadowridge.debate@gmail.com',
+                [email],
+                fail_silently=False
+            )
+            return redirect('password_reset_submit')
+    return render(request, 'TabCenterApp/password-reset.html')
+
+def password_reset_submit(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        code = request.POST['code']
+        password = request.POST['password']
+        r = password_reset_code.objects.filter(email=email, code=code)
+        if not r:
+            return render(request, 'TabCenterApp/password-reset-submit.html')
+        else:
+            u = TabCenterUser.objects.get(email=email)
+            u.set_password(password)
+            u.save()
+            return redirect('view_login')
+        
+    return render(request, 'TabCenterApp/password-reset-submit.html')
