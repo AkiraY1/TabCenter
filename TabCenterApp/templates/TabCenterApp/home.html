@@ -6,6 +6,8 @@
     <div class="pb-3">
         <h1>Tournaments </h1>
     </div>
+
+    <!-- Search filters -->
     <form action="{% url 'home' %}" method="POST">
         {% csrf_token %}
         <div class="row">
@@ -15,7 +17,7 @@
                     <option value="cndf">CNDF</option>
                     <option value="bp">BP</option>
                     <option value="world">World Schools</option>
-                    <option value="world">Speech</option>
+                    <option value="speech">Speech</option>
                 </select>
                 <label for="format" class="px-4">Format</label>
             </div>
@@ -51,24 +53,46 @@
         </div>
     </form>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Start</th>
-                <th scope="col">End</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for x in tourneys %}
-                <tr>
-                    <td><a href="{% url 'tournament' x.id %}">{{ x.name }}</a></td>
-                    <td>{{ x.startDate }}</td>
-                    <td>{{ x.endDate }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Cards for tournaments -->
+    <div class="pt-4">
+        {% for x in tourneys %}
+        <div class="card my-3" style="border-radius: 1rem;" id="customcard">
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="{% url 'tournament' x.id %}" class="text-decoration-none text-dark"><h4>{{ x.name }}</h4></a>
+                            <i class=" fs-6 bi-geo-alt"></i><h6 class="d-inline px-2">{{ x.city }}</h6>
+                            {% if x.online %}
+                            <div class="container-sm d-inline border border-success" style="border-radius: 0.3rem;" id="onlineyes">Virtual</div>
+                            {% endif %}
+                            {% if not x.online %}
+                            <div class="container-sm d-inline border border-dark" style="border-radius: 0.3rem;" id="onlineno">In-person</div>
+                            {% endif %}
+                            <div class="container-sm d-inline border border-dark" style="border-radius: 0.3rem;">
+                                {% for formatt in x.formats %}
+                                    {{ formatt }} /
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col py-2 border-end">
+                            <h6 class="text-end">{{ x.startDate }} - {{ x.endDate }}</h6>
+                            <h6 class="text-end">${{ x.price }} per Team</h6>
+                        </div>
+                        <div class="col py-2">
+                            {% if x.registration %}
+                            <button class="container-sm btn border border-success py-2" id="customregister"><a href="#" class="text-decoration-none text-success">Register</a></button>
+                            {% endif %}
+                            {% if not x.registration %}
+                            <button class="container-sm btn border border-dark py-2" disabled>Registration Closed</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock content %}
