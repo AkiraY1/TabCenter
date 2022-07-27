@@ -14,6 +14,9 @@ from django.core.mail import send_mail
 import uuid
 from django.core.paginator import Paginator
 from datetime import date
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.contrib.auth.password_validation import validate_password
 
 def home(request):
     if request.method == "POST":
@@ -64,8 +67,10 @@ def view_login(request):
             login(request, user)
             return redirect('/')
         else:
-            return render(request, 'TabCenterApp/login.html')
-    return render(request, 'TabCenterApp/login.html')
+            context = {"error":True}
+            return render(request, 'TabCenterApp/login.html', context)
+    context = {"error":False}
+    return render(request, 'TabCenterApp/login.html', context)
 
 def view_logout(request):
     logout(request)
@@ -78,16 +83,37 @@ def signup(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         
-        if password1 == password2:
-            try: 
-                user = TabCenterUser.objects.get(email=email)
-                return render(request, 'TabCenterApp/signup.html')
-            except TabCenterUser.DoesNotExist:
-                user = TabCenterUser.objects.create_user(email, name, password2)
-                return redirect('/logout')
-        else:
-            return render(request, 'TabCenterApp/signup.html')
-    return render(request, 'TabCenterApp/signup.html')
+        if (email == "") or (name == "") or (password1 == "") or (password1 == ""):
+            context = {"error":"Please fill all fields."}
+            return render(request, 'TabCenterApp/signup.html', context)
+
+        try:
+            validate_email(email)
+        except ValidationError:
+            context = {"error":"Please enter a valid email."}
+            return render(request, 'TabCenterApp/signup.html', context)
+
+        if password1 != password2:
+            context = {"error":"Passwords do not match."}
+            return render(request, 'TabCenterApp/signup.html', context)
+    
+        try:
+            validate_password(password2)
+        except ValidationError:
+            context = {"error":"Please choose a stronger password. Minimum length of 12 characters, cannot be entirely numeric, and no common passwords."}
+            return render(request, 'TabCenterApp/signup.html', context)
+
+        try: 
+            user = TabCenterUser.objects.get(email=email)
+            context = {"error":"Account already exists for this email."}
+            return render(request, 'TabCenterApp/signup.html', context)
+        except TabCenterUser.DoesNotExist:
+            user = TabCenterUser.objects.create_user(email, name, password2)
+            login(request, user)
+            return redirect('/')
+
+    context = {"error":False}
+    return render(request, 'TabCenterApp/signup.html', context)
 
 @login_required(login_url="/login")
 def account(request):
