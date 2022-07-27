@@ -12,6 +12,7 @@ from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 import uuid
+from django.core.paginator import Paginator
 
 def home(request):
     if request.method == "POST":
@@ -27,14 +28,19 @@ def home(request):
         year_tournament = request.POST.get('year')
         if year_tournament == None:
             year_tournament = ""
-        tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament), Q(location__icontains=location_tournament), Q(formats__icontains=format_tournament), Q(startDate__icontains=year_tournament))
+        tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament), Q(location__icontains=location_tournament), Q(formats__icontains=format_tournament), Q(startDate__icontains=year_tournament)).order_by("startDate")
     else:
         try:
-            tourneys = Tournament.objects.order_by("-startDate") #Remove - to reverse order
+            tourneys = Tournament.objects.order_by("startDate") #Remove - to reverse order
         except:
             raise Http404("Error: No tournaments can be found.")
-    output = {'tourneys': tourneys}
-    return render(request, 'TabCenterApp/home.html', output)
+    #Pagination
+    paginator = Paginator(tourneys, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'tourneys': tourneys, 'page_obj': page_obj}
+    return render(request, 'TabCenterApp/home.html', context)
 
 def tournament(request, tournament_id):
     try:
