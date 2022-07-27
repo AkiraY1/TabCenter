@@ -2,22 +2,72 @@
 
 {% block content %}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Start</th>
-            <th scope="col">End</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for x in tourneys %}
+<div class="px-5 py-3">
+    <div class="pb-3">
+        <h1>Tournaments </h1>
+    </div>
+    <form action="{% url 'home' %}">
+        <div class="row">
+            <div class="col-sm form-floating">
+                <select name="format" class="form-select" id="format">
+                    <option value="all">All</option>
+                    <option value="cndf">CNDF</option>
+                    <option value="bp">BP</option>
+                    <option value="world">World Schools</option>
+                    <option value="world">Speech</option>
+                </select>
+                <label for="format" class="px-4">Format</label>
+            </div>
+            <div class="col-sm form-floating">
+                <select name="location" class="form-select" id="location">
+                    <option value="all">All</option>
+                    <option value="ab">Alberta</option>
+                    <option value="bc">British Columbia</option>
+                    <option value="ma">Maritimes</option>
+                    <option value="pr">Prairies</option>
+                    <option value="on">Ontario</option>
+                    <option value="qb">Quebec</option>
+                </select>
+                <label for="location" class="px-4">Location</label>
+            </div>
+            <div class="col-sm form-floating">
+                <select name="year" class="form-select" id="year">
+                    <option value="all">All</option>
+                    <option value="1">2022-23</option>
+                    <option value="2">2021-22</option>
+                    <option value="3">2020-21</option>
+                    <option value="4">2019-20</option>
+                </select>
+                <label for="year" class="px-4">School Year</label>
+            </div>
+            <div class="col-sm-4 form-floating">
+                <input type="search" class="form-control" id="searchTourn" placeholder="Search">
+                <label for="searchTourn" class="px-4">Search</label>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-primary mb-2" type="submit"><i class="fs-3 bi-search"></i></button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
             <tr>
-                <td><a href="{% url 'tournament' x.id %}">{{ x.name }}</a></td>
-                <td>{{ x.startDate }}</td>
-                <td>{{ x.endDate }}</td>
+                <th scope="col">Name</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for x in tourneys %}
+                <tr>
+                    <td><a href="{% url 'tournament' x.id %}">{{ x.name }}</a></td>
+                    <td>{{ x.startDate }}</td>
+                    <td>{{ x.endDate }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock content %}
