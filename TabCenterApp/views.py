@@ -14,9 +14,20 @@ from django.core.mail import send_mail
 import uuid
 
 def home(request):
-    search_tournament = request.GET.get('search')
-    if search_tournament:
-        tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament))
+    if request.method == "POST":
+        search_tournament = request.POST.get('search')
+        if search_tournament == None:
+            search_tournament = ""
+        format_tournament = request.POST.get('format')
+        if format_tournament == None:
+            format_tournament = ""
+        location_tournament = request.POST.get('location')
+        if location_tournament == None:
+            location_tournament = ""
+        year_tournament = request.POST.get('year')
+        if year_tournament == None:
+            year_tournament = ""
+        tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament), Q(location__icontains=location_tournament), Q(formats__icontains=format_tournament), Q(startDate__icontains=year_tournament))
     else:
         try:
             tourneys = Tournament.objects.order_by("-startDate") #Remove - to reverse order

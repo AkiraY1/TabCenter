@@ -3,11 +3,25 @@ from tabnanny import verbose
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.postgres.fields import ArrayField
 
 class Tournament(models.Model):
     name = models.CharField("name", max_length=60)
     startDate = models.DateField("startDate")
     endDate = models.DateField("endDate")
+    location = models.CharField("location", max_length=2, default="x")
+
+    def get_default_format():
+        return list("x")
+
+    formats = ArrayField(verbose_name="format",
+        base_field=models.CharField("format", max_length=255),
+        default=get_default_format
+    )
+    price = models.FloatField("price")
+    online = models.BooleanField("online")
+    city = models.CharField("city", max_length=255)
+    registration = models.BooleanField("registration")
 
 class TabCenterUserManager(BaseUserManager):
     def create_user(self, email, name, password=None):

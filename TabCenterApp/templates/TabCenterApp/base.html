@@ -42,11 +42,11 @@
                         {% endif %}
                         {% if not user.is_authenticated %}
                         <li>
-                          <a href="login" class="nav-link px-sm-0 px-2 text-white text-decoration-none">
+                          <a href="{% url 'login' %}" class="nav-link px-sm-0 px-2 text-white text-decoration-none">
                               <i class="fs-5 bi-box-arrow-in-right"></i><span class="mx-2 d-none d-sm-inline">Login</span> </a>
                         </li>
                         <li>
-                            <a href="signup" class="nav-link px-sm-0 px-2 text-white text-decoration-none">
+                            <a href="{% url 'signup' %}" class="nav-link px-sm-0 px-2 text-white text-decoration-none">
                                 <i class="fs-5 bi-node-plus"></i><span class="mx-2 d-none d-sm-inline">Signup</span></a>
                         </li>
                         {% endif %}
@@ -59,7 +59,7 @@
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                             <li><a class="dropdown-item" href="#">Create tournament...</a></li>
                             <li><a class="dropdown-item" href="#">Institution</a></li>
-                            <li><a class="dropdown-item" href="account">Settings</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account' %}">Settings</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
