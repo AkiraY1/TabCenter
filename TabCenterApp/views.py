@@ -13,6 +13,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
 import uuid
 from django.core.paginator import Paginator
+from datetime import date
 
 def home(request):
     if request.method == "POST":
@@ -28,10 +29,14 @@ def home(request):
         year_tournament = request.POST.get('year')
         if year_tournament == None:
             year_tournament = ""
-        tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament), Q(location__icontains=location_tournament), Q(formats__icontains=format_tournament), Q(startDate__icontains=year_tournament)).order_by("startDate")
+        attrs = [search_tournament, format_tournament, location_tournament, year_tournament]
+        if attrs.count(attrs[0]) == len(attrs):
+            tourneys = Tournament.objects.filter(endDate__range=[date.today(), "2050-1-1"]).order_by("startDate")
+        else:
+            tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament), Q(location__icontains=location_tournament), Q(formats__icontains=format_tournament), Q(startDate__icontains=year_tournament)).order_by("-startDate")
     else:
         try:
-            tourneys = Tournament.objects.order_by("startDate") #Remove - to reverse order
+            tourneys = Tournament.objects.filter(endDate__range=[date.today(), "2050-1-1"]).order_by("startDate") #Remove - to reverse order
         except:
             raise Http404("Error: No tournaments can be found.")
     #Pagination
