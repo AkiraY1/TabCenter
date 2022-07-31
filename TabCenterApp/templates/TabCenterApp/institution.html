@@ -29,13 +29,54 @@
 
 <h3>Institutions You're a Member Of</h3>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in memberInstitutions %}
+        <tr>
+            <td scope="row">{{ p.name }}</td>
+            <td><button type="button" class="btn btn-primary">Leave</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 <h3>Pending Institution Invites</h3>
 
-
-List of pending part of institutions on side with accept or decline buttons
-
-List of people in institution (add/remove people from institution IF organizer)
-Leave an institution > just a button press and leave
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for q in pendingInstitutions %}
+        <tr>
+            <td scope="row">{{ q.name }}</td>
+            <td>
+                <form method="POST">
+                    <input type="hidden" name="accept_invite_id" value="{{ q.id }}">
+                    <button type="submit" class="btn btn-primary">Join</button>
+                </form>
+            </td>
+            <td>
+                <form method="POST">
+                    <input type="hidden" name="decline_invite_id" value="{{ q.id }}">
+                    <button type="submit" class="btn btn-primary">Decline</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 <!-- Modal for viewing members -->
 {% for i in institutions %}

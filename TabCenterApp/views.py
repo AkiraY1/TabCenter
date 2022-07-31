@@ -171,8 +171,10 @@ def password_reset_submit(request):
 @login_required(login_url="/login")
 def institution(request):
     organizeInstitutions = TabCenterUser.objects.get(id=request.user.id).institution_set.all()
+    memberInstitutions = TabCenterUser.objects.get(id=request.user.id).part_of_institutions.all()
+    pendingInstitutions = TabCenterUser.objects.get(id=request.user.id).pending_part_of_institutions.all()
+    context = {"institutions": organizeInstitutions, "memberInstitutions": memberInstitutions, "pendingInstitutions": pendingInstitutions}
 
-    context = {"institutions": organizeInstitutions}
     if request.method == "POST":
 
         #Name Change
@@ -185,10 +187,9 @@ def institution(request):
                 try:
                     i.save()
                     organizeInstitutions = TabCenterUser.objects.get(id=request.user.id).institution_set.all()
-                    context = {"institutions": organizeInstitutions}
+                    context = {"institutions": organizeInstitutions, "memberInstitutions": memberInstitutions, "pendingInstitutions": pendingInstitutions}
                 except:
                     return render(request, 'TabCenterApp/institution.html', context)
-
             return redirect('institution')
 
         #Delete Institution
@@ -197,7 +198,7 @@ def institution(request):
             i = Institution.objects.get(id=inst_id_delete)
             i.delete()
             organizeInstitutions = TabCenterUser.objects.get(id=request.user.id).institution_set.all()
-            context = {"institutions": organizeInstitutions}
+            context = {"institutions": organizeInstitutions, "memberInstitutions": memberInstitutions, "pendingInstitutions": pendingInstitutions}
         
         #Add new member
         if "email_user_add" in request.POST:
@@ -210,7 +211,17 @@ def institution(request):
             i = Institution.objects.get(id=institution_id_add_member)
             i.pendingMembers.add(u)
             i.save()
-            return redirect('home')
+            return redirect('institution')
+        
+        #Accept invite
+        if "accept_invite_id" in request.POST:
+            institution_id_invite = request.POST['accept_invite_id']
+            i = Institution.objects.get(id=institution_id_invite)
+            u = request.user
+            i.pendingMembers.remove(u)
+            i.members.add(u)
+            i.save()
+            return redirect('institution')
 
     return render(request, 'TabCenterApp/institution.html', context)
 
