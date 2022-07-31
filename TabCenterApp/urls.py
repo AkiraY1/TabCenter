@@ -13,5 +13,7 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     path('change-password/', auth_views.PasswordChangeView.as_view(template_name='TabCenterApp/change-password.html', success_url='/account'), name='change_password'),
     path('password-reset/', views.password_reset, name='password_reset'),
-    path('password-reset-submit/', views.password_reset_submit, name='password_reset_submit')
+    path('password-reset-submit/', views.password_reset_submit, name='password_reset_submit'),
+    path('institution/', views.institution, name='institution'),
+    path('create-institution/', views.createInstitution, name='createInstitution'),
 ]

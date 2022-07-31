@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.template import loader
-from .models import Tournament, password_reset_code
+from .models import Tournament, password_reset_code, Institution
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -17,6 +17,8 @@ from datetime import date
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.password_validation import validate_password
+
+############################################################ Home/Tournament Views
 
 def home(request):
     if request.method == "POST":
@@ -58,6 +60,8 @@ def tournament(request, tournament_id):
     output = {'tourney': info}
     return render(request, 'TabCenterApp/tournament.html', output)
 
+################################################################### Auth
+
 def view_login(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -72,6 +76,7 @@ def view_login(request):
     context = {"error":False}
     return render(request, 'TabCenterApp/login.html', context)
 
+@login_required(login_url="/login")
 def view_logout(request):
     logout(request)
     return redirect('/')
@@ -160,3 +165,71 @@ def password_reset_submit(request):
             return redirect('view_login')
         
     return render(request, 'TabCenterApp/password-reset-submit.html')
+
+################################################################### Institutions
+
+@login_required(login_url="/login")
+def institution(request):
+    organizeInstitutions = TabCenterUser.objects.get(id=request.user.id).institution_set.all()
+
+    context = {"institutions": organizeInstitutions}
+    if request.method == "POST":
+
+        #Name Change
+        if "inst_name" in request.POST:
+            inst_id = request.POST['institution_id']
+            inst_name = request.POST['inst_name']
+            if inst_name != "":
+                i = Institution.objects.get(id=inst_id)
+                i.name = inst_name
+                try:
+                    i.save()
+                    organizeInstitutions = TabCenterUser.objects.get(id=request.user.id).institution_set.all()
+                    context = {"institutions": organizeInstitutions}
+                except:
+                    return render(request, 'TabCenterApp/institution.html', context)
+
+            return redirect('institution')
+
+        #Delete Institution
+        if "institution_id_delete" in request.POST:
+            inst_id_delete = request.POST['institution_id_delete']
+            i = Institution.objects.get(id=inst_id_delete)
+            i.delete()
+            organizeInstitutions = TabCenterUser.objects.get(id=request.user.id).institution_set.all()
+            context = {"institutions": organizeInstitutions}
+        
+        #Add new member
+        if "email_user_add" in request.POST:
+            email_user_add = request.POST['email_user_add']
+            institution_id_add_member = request.POST['institution_id_add_member']
+            try:
+                u = TabCenterUser.objects.get(email=email_user_add)
+            except:
+                return render(request, 'TabCenterApp/institution.html', context)
+            i = Institution.objects.get(id=institution_id_add_member)
+            i.pendingMembers.add(u)
+            i.save()
+            return redirect('home')
+
+    return render(request, 'TabCenterApp/institution.html', context)
+
+@login_required(login_url="/login")
+def createInstitution(request):
+    if request.method == 'POST':
+        institutionName = request.POST['institutionName']
+        if institutionName == "":
+            context = {'errors':"Please enter an institution name."}
+            return render(request, 'TabCenterApp/createInstitution.html', context)
+
+        currentUser = request.user
+        try:
+            i = Institution(name=institutionName, organizer=currentUser)
+            i.save()
+            return redirect('institution')
+        except:
+            context = {'errors':"Institution name already taken."}
+            return render(request, 'TabCenterApp/createInstitution.html', context)
+
+    context = {'errors':None}
+    return render(request, 'TabCenterApp/createInstitution.html', context)

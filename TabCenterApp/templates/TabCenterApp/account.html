@@ -5,7 +5,6 @@
     Email: {{ user.email }} <br>
     Name: {{ user.name }} <br>
     Paradigm: {{ user.paradigm }} <br>
-    Institution: {{ user.institution }} <br>
     <a href="/change-password">Change Password</a>
 
     <h2>Update Profile</h2>
@@ -17,5 +16,7 @@
         <textarea type="text" name="paradigm" id="paradigm" placeholder={{ user.paradigm }}> {{ user.paradigm }} </textarea>
         <button type="submit">Save</button>
     </form>
+
+    If you wish to delete your account, please contact the admin at akirayoshiyama1@gmail.com
 
 {% endblock content %}

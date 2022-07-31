@@ -55,7 +55,6 @@ class TabCenterUser(AbstractBaseUser):
     )
     name = models.TextField(verbose_name="full name", max_length=255)
     paradigm = models.TextField(verbose_name="paradigm", default="Empty")
-    institution = models.TextField(verbose_name="institution", default="Empty")
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -82,3 +81,9 @@ class password_reset_code(models.Model):
     email = models.CharField("email", max_length=255)
     code = models.CharField("code", max_length=50)
     time = models.TimeField(auto_now=True)
+
+class Institution(models.Model):
+    name = models.CharField("name", max_length=255, unique=True)
+    organizer = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, default="x")
+    members = models.ManyToManyField(TabCenterUser, related_name='part_of_institutions')
+    pendingMembers = models.ManyToManyField(TabCenterUser, related_name='pending_part_of_institutions')

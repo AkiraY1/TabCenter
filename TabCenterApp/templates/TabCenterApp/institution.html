@@ -1,0 +1,121 @@
+{% extends "TabCenterApp/base.html" %}
+
+{% block content %}
+
+<a href="{% url 'createInstitution' %}">Create an Institution</a>
+
+<!-- Your Institutions panel-->
+<h3>Your Institutions</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in institutions %}
+        <tr>
+            <td scope="row">{{ i.name }}</td>
+            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instMembers{{ i.id }}">View Members</button></td>
+            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeInstName{{ i.id }}">Change Name</button></td>
+            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteInst{{ i.id }}">Delete Institution</button></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Institutions You're a Member Of</h3>
+
+<h3>Pending Institution Invites</h3>
+
+
+List of pending part of institutions on side with accept or decline buttons
+
+List of people in institution (add/remove people from institution IF organizer)
+Leave an institution > just a button press and leave
+
+<!-- Modal for viewing members -->
+{% for i in institutions %}
+    <div class="modal fade" id="instMembers{{ i.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Institution Members</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ i.members }}
+                </div>
+                <div class="modal-footer">
+                    <h6>Add Member to Institution</h6> <br>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="email" name="email_user_add" placeholder="Member's Email">
+                        <button type="submit" class="btn btn-secondary">Add Member</button>
+                        <input type="hidden" name="institution_id_add_member" value="{{ i.id }}">
+                        <p>The user must have an account registered under this email.</p>
+                        <p>Once you click "Add Member," the user will be sent an invite to join your institution. They will not show up in your institution until they accept the invite.</p>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Modal for changing institution name -->
+{% for i in institutions %}
+    <div class="modal fade" id="changeInstName{{ i.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Change Institution Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="nameChangeForm">
+                        {% csrf_token %}
+                        <input type="text" name="inst_name" placeholder="{{ i.name }}"> <br>
+                        <input type="checkbox" name="areyousure1" id="areyousure1" required>
+                        <label for="areyousure1">Are you sure you want to change the name of {{ i.name }}?</label> <br>
+                        <input type="hidden" name="institution_id" value="{{ i.id }}">
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Modal for deleting institution -->
+{% for i in institutions %}
+    <div class="modal fade" id="deleteInst{{ i.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Institution</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="instDeleteForm">
+                        {% csrf_token %}
+                        <label for="areyousure1">Are you sure you want to delete {{ i.name }}?</label> <br>
+                        <input type="hidden" name="institution_id_delete" value="{{ i.id }}">
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock content %}
