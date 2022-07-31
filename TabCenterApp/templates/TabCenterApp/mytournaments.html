@@ -1,0 +1,51 @@
+{% extends "TabCenterApp/base.html" %}
+
+{% block content %}
+
+<h3>My Tournaments </h3>
+
+<button type="button" class="btn btn-primary" action="{% url 'createTournament' %}">Create tournament</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Location</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in tournaments %}
+        <tr>
+            <td scope="row">{{ i.name }}</td>
+            <td>{{ i.location }}</td>
+            <td>{{ i.startDate }} - {{ i.endDate }}</td>
+            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instReg{{ i.id }}">View Registrations</button></td>
+            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#intEdit{{ i.id }}">Edit</button></t>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal for editing tournament -->
+{% for t in tournaments %}
+    <div class="modal fade" id="intEdit{{ t.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Tournament</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock content %}

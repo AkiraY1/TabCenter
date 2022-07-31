@@ -272,3 +272,17 @@ def createInstitution(request):
 
     context = {'errors':None}
     return render(request, 'TabCenterApp/createInstitution.html', context)
+
+################################################################### Tournament Management
+
+@login_required(login_url="/login")
+def myTournaments(request):
+    tournaments = TabCenterUser.objects.get(id=request.user.id).tournament_set.all()
+    context = {"tournaments": tournaments}
+    return render(request, 'TabCenterApp/mytournaments.html', context)
+
+@login_required(login_url="/login")
+def createTournament(request):
+    #tournaments = 
+    #context = {"myTournaments": tournaments}
+    return render(request, 'TabCenterApp/createTournament.html')

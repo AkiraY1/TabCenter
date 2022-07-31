@@ -5,24 +5,6 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.contrib.postgres.fields import ArrayField
 
-class Tournament(models.Model):
-    name = models.CharField("name", max_length=60)
-    startDate = models.DateField("startDate")
-    endDate = models.DateField("endDate")
-    location = models.CharField("location", max_length=2, default="x")
-
-    def get_default_format():
-        return list("x")
-
-    formats = ArrayField(verbose_name="format",
-        base_field=models.CharField("format", max_length=255),
-        default=get_default_format
-    )
-    price = models.FloatField("price")
-    online = models.BooleanField("online")
-    city = models.CharField("city", max_length=255)
-    registration = models.BooleanField("registration")
-
 class TabCenterUserManager(BaseUserManager):
     def create_user(self, email, name, password=None):
         if not email:
@@ -81,6 +63,29 @@ class password_reset_code(models.Model):
     email = models.CharField("email", max_length=255)
     code = models.CharField("code", max_length=50)
     time = models.TimeField(auto_now=True)
+
+class Tournament(models.Model):
+    name = models.CharField("name", max_length=60)
+    startDate = models.DateField("startDate")
+    endDate = models.DateField("endDate")
+    location = models.CharField("location", max_length=2, default="x")
+    organizer = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, default="x")
+
+    def get_default_format():
+        return list("x")
+
+    formats = ArrayField(verbose_name="format",
+        base_field=models.CharField("format", max_length=255),
+        default=get_default_format
+    )
+    price = models.FloatField("price")
+    online = models.BooleanField("online")
+    city = models.CharField("city", max_length=255)
+    registration = models.BooleanField("registration")
+    tabbyCatLink = models.CharField("tabbyCatLink", max_length=1000, default="x")
+    invitationDocLink = models.CharField("invitationDocLink", max_length=1000, default="x")
+    registrationRequirements = models.CharField("registrationRequirements", max_length=1500, default="x")
+    description = models.CharField("description", max_length=4000, default="x")
 
 class Institution(models.Model):
     name = models.CharField("name", max_length=255, unique=True)

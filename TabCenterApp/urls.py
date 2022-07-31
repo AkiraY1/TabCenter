@@ -16,4 +16,6 @@ urlpatterns = [
     path('password-reset-submit/', views.password_reset_submit, name='password_reset_submit'),
     path('institution/', views.institution, name='institution'),
     path('create-institution/', views.createInstitution, name='createInstitution'),
+    path('my-tournaments/', views.myTournaments, name='myTournaments'),
+    path('create-tournament/', views.createTournament, name='createTournament'),
 ]

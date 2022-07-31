@@ -24,7 +24,7 @@ LOGIN_URL='/'
 SECRET_KEY = 'django-insecure-%85(btoo-odtmbkn^#6nikx(--u)jr88-ylzcpke6*6gquuw@k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '0.0.0.0',
@@ -54,6 +54,11 @@ INSTALLED_APPS = [
     'ckeditor',
     'crispy_forms',
     "crispy_bootstrap5"
+]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5" #https://github.com/django-crispy-forms/crispy-bootstrap5
@@ -143,6 +148,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+##STATICFILES_DIRS = [
+ #   os.path.join(BASE_DIR, 'static'),
+#]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

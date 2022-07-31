@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        {% load static %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
@@ -49,10 +48,10 @@
                             <a href="#" data-bs-toggle="collapse" class="nav-link px-sm-0 px-2 text-white text-decoration-none">
                                 <i class="fs-5 bi-archive"></i><span class="mx-2 d-none d-sm-inline">Registered</span> </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#" class="nav-link px-sm-0 px-2 text-white text-decoration-none">
                                 <i class="fs-5 bi-file-earmark-post"></i><span class="mx-2 d-none d-sm-inline">MyTournaments</span></a>
-                        </li>
+                        </li> -->
                         {% endif %}
                         {% if not user.is_authenticated %}
                         <li>
@@ -71,7 +70,7 @@
                           <i class="fs-5 bi-person-circle"></i><span class="d-none d-sm-inline mx-2">Account</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                            <li><a class="dropdown-item" href="#">Create tournament...</a></li>
+                            <li><a class="dropdown-item" href="{% url 'myTournaments' %}">My Tournaments</a></li>
                             <li><a class="dropdown-item" href="{% url 'institution' %}">Institution</a></li>
                             <li><a class="dropdown-item" href="{% url 'account' %}">Settings</a></li>
                             <li>
