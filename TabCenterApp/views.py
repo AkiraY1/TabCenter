@@ -223,6 +223,34 @@ def institution(request):
             i.save()
             return redirect('institution')
 
+        #Decline invite
+        if "decline_invite_id" in request.POST:
+            institution_id_decline = request.POST['decline_invite_id']
+            i = Institution.objects.get(id=institution_id_decline)
+            u = request.user
+            i.pendingMembers.remove(u)
+            i.save()
+            return redirect('institution')
+        
+        #Leave institution
+        if "leave_inst_id" in request.POST:
+            leave_inst_id = request.POST['leave_inst_id']
+            i = Institution.objects.get(id=leave_inst_id)
+            u = request.user
+            i.members.remove(u)
+            i.save()
+            return redirect('institution')
+        
+        #Removing a member
+        if "delete_member_id" in request.POST:
+            delete_member_id = request.POST['delete_member_id']
+            delete_member_email = request.POST['delete_member_email']
+            i = Institution.objects.get(id=delete_member_id)
+            u = TabCenterUser.objects.get(email=delete_member_email)
+            i.members.remove(u)
+            i.save()
+            return redirect('institution')
+
     return render(request, 'TabCenterApp/institution.html', context)
 
 @login_required(login_url="/login")

@@ -32,16 +32,22 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">
-                Name
-            </th>
+            <th scope="col">Name</th>
+            <th scope="col">Organizer</th>
         </tr>
     </thead>
     <tbody>
         {% for p in memberInstitutions %}
         <tr>
             <td scope="row">{{ p.name }}</td>
-            <td><button type="button" class="btn btn-primary">Leave</button></td>
+            <td>{{ p.organizer.name }}</td>
+            <td>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="leave_inst_id" value="{{ p.id }}">
+                    <button type="submit" class="btn btn-primary">Leave</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -52,23 +58,25 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">
-                Name
-            </th>
+            <th scope="col">Name</th>
+            <th scope="col">Organizer</th>
         </tr>
     </thead>
     <tbody>
         {% for q in pendingInstitutions %}
         <tr>
             <td scope="row">{{ q.name }}</td>
+            <td>{{ q.organizer.name }}</td>
             <td>
                 <form method="POST">
+                    {% csrf_token %}
                     <input type="hidden" name="accept_invite_id" value="{{ q.id }}">
                     <button type="submit" class="btn btn-primary">Join</button>
                 </form>
             </td>
             <td>
                 <form method="POST">
+                    {% csrf_token %}
                     <input type="hidden" name="decline_invite_id" value="{{ q.id }}">
                     <button type="submit" class="btn btn-primary">Decline</button>
                 </form>
@@ -88,7 +96,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{ i.members }}
+                    {% if i.members.all.exists %}
+                        {% for person in i.members.all %}
+                            {{ person.name }}
+                            {{ person.email }}
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete_member_id" value="{{ i.id }}">
+                                <input type="hidden" name="delete_member_email" value="{{ person.email }}">
+                                <button type="submit" class="btn btn-primary">Remove</button>
+                            </form>
+                        {% endfor %}
+                    {% else %}
+                        <p>No members</p>
+                    {% endif %}
                 </div>
                 <div class="modal-footer">
                     <h6>Add Member to Institution</h6> <br>
