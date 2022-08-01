@@ -4,7 +4,6 @@
 
     Email: {{ user.email }} <br>
     Name: {{ user.name }} <br>
-    Paradigm: {{ user.paradigm }} <br>
     <a href="/change-password">Change Password</a>
 
     <h2>Update Profile</h2>
@@ -12,8 +11,6 @@
         {% csrf_token %}
         <label for="name">Name</label>
         <input type="text" name="name" id="name" placeholder={{ user.name }}>
-        <label for="paradigm">Paradigm</label>
-        <textarea type="text" name="paradigm" id="paradigm" placeholder={{ user.paradigm }}> {{ user.paradigm }} </textarea>
         <button type="submit">Save</button>
     </form>
 

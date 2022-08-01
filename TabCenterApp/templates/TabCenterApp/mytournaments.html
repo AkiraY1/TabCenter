@@ -18,7 +18,7 @@
         {% for i in tournaments %}
         <tr>
             <td scope="row">{{ i.name }}</td>
-            <td>{{ i.location }}</td>
+            <td>{{ i.city }}</td>
             <td>{{ i.startDate }} - {{ i.endDate }}</td>
             {% if i.approved %}
                 <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instReg{{ i.id }}">View Registrations</button></td>
@@ -42,6 +42,45 @@
         {% endfor %}
     </tbody>
 </table>
+
+<!-- Modal for viewing registrations -->
+{% for t in tournaments %}
+    <div class="modal fade" id="instReg{{ t.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registrations</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table" style="font-size:x-small;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Debater #1</th>
+                                <th scope="col">Debater #1 Email</th>
+                                <th scope="col">Debater #1 Grade</th>
+                                <th scope="col">Debater #2</th>
+                                <th scope="col">Debater #2 Email</th>
+                                <th scope="col">Debater #2 Grade</th>
+                                <th scope="col">Debater #3</th>
+                                <th scope="col">Debater #3 Email</th>
+                                <th scope="col">Debater #3 Grade</th>
+                                <th scope="col">Format</th>
+                                <th scope="col">Institution</th>
+                                <th scope="col">Coach Name</th>
+                                <th scope="col">Coach Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
 
 <!-- Modal for editing tournament
 {% for t in tournaments %}
@@ -153,7 +192,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
-{% endfor %}
+    </div> 
+{% endfor %} -->
 
 {% endblock content %}

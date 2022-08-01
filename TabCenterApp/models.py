@@ -36,7 +36,6 @@ class TabCenterUser(AbstractBaseUser):
         unique=True
     )
     name = models.TextField(verbose_name="full name", max_length=255)
-    paradigm = models.TextField(verbose_name="paradigm", default="Empty")
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -64,6 +63,22 @@ class password_reset_code(models.Model):
     code = models.CharField("code", max_length=50)
     time = models.TimeField(auto_now=True)
 
+class Institution(models.Model):
+    name = models.CharField("name", max_length=255, unique=True)
+    organizer = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, default="x")
+    members = models.ManyToManyField(TabCenterUser, related_name='part_of_institutions')
+    pendingMembers = models.ManyToManyField(TabCenterUser, related_name='pending_part_of_institutions')
+
+class Entry(models.Model):
+    member1 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member1")
+    member1_grade = models.IntegerField("grade1")
+    member2 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member2")
+    member2_grade = models.IntegerField("grade2")
+    member3 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member3")
+    member3_grade = models.IntegerField("grade3")
+    institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=True, null=True)
+    formats = models.CharField("format", max_length=255)
+
 class Tournament(models.Model):
     name = models.CharField("name", max_length=60)
     startDate = models.DateField("startDate")
@@ -87,9 +102,4 @@ class Tournament(models.Model):
     invitationDocLink = models.CharField("invitationDocLink", max_length=1000, default="x")
     registrationRequirements = models.CharField("registrationRequirements", max_length=1500, default="x")
     description = models.CharField("description", max_length=4000, default="x")
-
-class Institution(models.Model):
-    name = models.CharField("name", max_length=255, unique=True)
-    organizer = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, default="x")
-    members = models.ManyToManyField(TabCenterUser, related_name='part_of_institutions')
-    pendingMembers = models.ManyToManyField(TabCenterUser, related_name='pending_part_of_institutions')
+    entries = models.ManyToManyField(Entry, blank=True)

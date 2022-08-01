@@ -124,11 +124,8 @@ def signup(request):
 def account(request):
     if request.method == 'POST':
         name = request.POST['name']
-        paradigm = request.POST['paradigm']
         if name != '':
             request.user.name = name
-        if paradigm != request.user.paradigm:
-            request.user.paradigm = paradigm
         request.user.save()
         return render(request, 'TabCenterApp/account.html')
     return render(request, 'TabCenterApp/account.html')

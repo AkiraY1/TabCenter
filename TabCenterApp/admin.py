@@ -33,17 +33,17 @@ class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     class Meta:
         model = TabCenterUser
-        fields = ('email', 'name', 'password', 'paradigm', 'is_active', 'is_admin')
+        fields = ('email', 'name', 'password', 'is_active', 'is_admin')
     
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('email', 'name', 'paradigm', 'is_admin')
+    list_display = ('email', 'name', 'is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('name', 'paradigm')}),
+        ('Personal info', {'fields': ('name',)}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     add_fieldsets = (
