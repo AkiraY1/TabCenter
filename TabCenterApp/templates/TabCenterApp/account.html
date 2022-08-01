@@ -2,18 +2,35 @@
 
 {% block content %}
 
-    Email: {{ user.email }} <br>
-    Name: {{ user.name }} <br>
-    <a href="/change-password">Change Password</a>
-
-    <h2>Update Profile</h2>
-    <form method="POST">
+<div class="container py-3 px-4">
+    <h3>Account Settings</h3>
+    <div class="card mb-3 w-50" style="border-radius: 0.5rem; background-color: #97d5f1;">
+        <div class="card-body">
+            <div class="container">
+                Please contact the Copacetic team if you want to delete your account.
+            </div>
+        </div>
+    </div>
+    <div class="py-2">
+        <h6 class="d-inline">Email:</h6><div class="d-inline px-2">{{ user.email }}</div>
+    </div>
+    <div class="py-2">
+        <h6 class="d-inline">Name:</h6><div class="d-inline px-2">{{ user.name }}</div>
+    </div>
+    <form method="POST" class="py-2">
         {% csrf_token %}
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" placeholder={{ user.name }}>
-        <button type="submit">Save</button>
+        <div class="row">
+            <div class="col-4">
+                <input class="form-control d-inline" type="text" name="name" id="name" placeholder="Change Name">
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary d-inline">Save</button>
+            </div>
+        </div>
     </form>
-
-    If you wish to delete your account, please contact the admin at akirayoshiyama1@gmail.com
+    <div class="py-2">
+        <a href="/change-password"><button class="btn btn-primary">Change Password</button></a>
+    </div>
+</div>
 
 {% endblock content %}
