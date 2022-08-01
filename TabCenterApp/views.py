@@ -279,6 +279,16 @@ def createInstitution(request):
 def myTournaments(request):
     tournaments = TabCenterUser.objects.get(id=request.user.id).tournament_set.all()
     context = {"tournaments": tournaments}
+
+    #Editing tournaments
+    if request.method == "POST":
+        t_id = request.POST["regopenclose_id"]
+        t = Tournament.objects.get(id=t_id)
+        t.registration = (not t.registration)
+        t.save()
+        tournaments = TabCenterUser.objects.get(id=request.user.id).tournament_set.all()
+        context = {"tournaments": tournaments}
+
     return render(request, 'TabCenterApp/mytournaments.html', context)
 
 @login_required(login_url="/login")
