@@ -2,14 +2,28 @@
 
 {% block content %}
 
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="institutionName" placeholder="Name of Institution">
-    <button type="submit">Create</button>
-</form>
-
-{% if errors != None %}
-    {{ errors }}
-{% endif %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col">
+            
+        </div>
+        <div class="col">
+            <h3 class="d-flex justify-content-center py-2">Create Institution</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" class="form-control my-2" name="institutionName" placeholder="Name of Institution">
+                <button type="submit" class="btn btn-primary my-2">Create</button>
+            </form>
+            {% if errors != None %}
+            <div class="alert alert-danger" role="alert">
+                {{ errors }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="col">
+            
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

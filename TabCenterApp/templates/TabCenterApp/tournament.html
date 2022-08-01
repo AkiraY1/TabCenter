@@ -2,7 +2,37 @@
 
 {% block content %}
 
-<h3> {{ tourney.name }} </h3>
-<h5> {{ tourney.startDate }} - {{ tourney.endDate }}</h5>
+<div class="container py-4 px-5">
+    <div class="row">
+        <h2> {{ tourney.name }} </h2>
+    </div>
+    <div class="row">
+        <h6> {{ tourney.startDate }} - {{ tourney.endDate }} | {{ tourney.city }}</h6>
+    </div>
+    <div class="row pt-4">
+        <h4>Description</h4>
+        <p>{{ tourney.description }}</p>
+    </div>
+    <div class="row pt-4">
+        <h4>Registration Requirements</h4>
+        <p>{{ tourney.registrationRequirements }}</p>
+    </div>
+    <div class="row pt-4">
+        <div class="col">
+            {% if tourney.registration %}
+            <a href="{% url 'registerSelect' tourney.id %}" class="text-decoration-none text-success"><button class="container-sm btn border border-success py-2" id="customregister">Register</button></a>
+            {% endif %}
+            {% if not tourney.registration %}
+            <button class="container-sm btn border border-dark py-2" disabled>Registration Closed</button>
+            {% endif %}
+        </div>
+        <div class="col">
+            <a href={{ tourney.invitationDocLink }} target="_blank" class="text-decoration-none"><button class="container-sm btn btn-primary py-2">Tournament Invitation</button></a>
+        </div>
+        <div class="col">
+            <a href={{ tourney.tabbyCatLink }} target="_blank" class="text-decoration-none"><button class="container-sm btn btn-dark py-2">TabbyCat Site</button></a>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

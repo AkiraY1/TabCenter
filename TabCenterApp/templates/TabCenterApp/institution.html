@@ -2,89 +2,98 @@
 
 {% block content %}
 
-<a href="{% url 'createInstitution' %}">Create an Institution</a>
+<div class="py-3 px-4">
+    <h3>Institutions</h3>
+    <div class="py-2">
+        <a href="{% url 'createInstitution' %}"><button class="btn btn-primary">Create an Institution</button></a>
+    </div>
 
-<!-- Your Institutions panel-->
-<h3>Your Institutions</h3>
+    <!-- Your Institutions panel-->
+    <h5 class="px-1 pt-4">Your Institutions</h5>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">
-                Name
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for i in institutions %}
-        <tr>
-            <td scope="row">{{ i.name }}</td>
-            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instMembers{{ i.id }}">View Members</button></td>
-            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeInstName{{ i.id }}">Change Name</button></td>
-            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteInst{{ i.id }}">Delete Institution</button></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="width:40%">Name</th>
+                <th scope="col" style="width:20%">Members</th>
+                <th scope="col" style="width:20%">Change Name</th>
+                <th scope="col" style="width:20%">Delete Institution</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in institutions %}
+            <tr>
+                <td scope="row">{{ i.name }}</td>
+                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#instMembers{{ i.id }}">Members</button></td>
+                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changeInstName{{ i.id }}">Change Name</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteInst{{ i.id }}">Delete Institution</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<h3>Institutions You're a Member Of</h3>
+    <h5 class="px-1">Member Institutions</h5>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Organizer</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for p in memberInstitutions %}
-        <tr>
-            <td scope="row">{{ p.name }}</td>
-            <td>{{ p.organizer.name }}</td>
-            <td>
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="leave_inst_id" value="{{ p.id }}">
-                    <button type="submit" class="btn btn-primary">Leave</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="width:40%">Name</th>
+                <th scope="col" style="width:40%">Organizer</th>
+                <th scope="col" style="width:20%">Leave</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in memberInstitutions %}
+            <tr>
+                <td scope="row">{{ p.name }}</td>
+                <td>{{ p.organizer.name }}</td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="leave_inst_id" value="{{ p.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Leave</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<h3>Pending Institution Invites</h3>
+    <h5 class="px-1">Pending Institution Invitations</h5>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Organizer</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for q in pendingInstitutions %}
-        <tr>
-            <td scope="row">{{ q.name }}</td>
-            <td>{{ q.organizer.name }}</td>
-            <td>
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="accept_invite_id" value="{{ q.id }}">
-                    <button type="submit" class="btn btn-primary">Join</button>
-                </form>
-            </td>
-            <td>
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="decline_invite_id" value="{{ q.id }}">
-                    <button type="submit" class="btn btn-primary">Decline</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="width:40%">Name</th>
+                <th scope="col" style="width:20%">Organizer</th>
+                <th scope="col" style="width:20%">Join</th>
+                <th scope="col" style="width:20%">Decline</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for q in pendingInstitutions %}
+            <tr>
+                <td scope="row">{{ q.name }}</td>
+                <td>{{ q.organizer.name }}</td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="accept_invite_id" value="{{ q.id }}">
+                        <button type="submit" class="btn btn-primary btn-sm">Join</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="decline_invite_id" value="{{ q.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <!-- Modal for viewing members -->
 {% for i in institutions %}
@@ -97,31 +106,59 @@
                 </div>
                 <div class="modal-body">
                     {% if i.members.all.exists %}
-                        {% for person in i.members.all %}
-                            {{ person.name }}
-                            {{ person.email }}
-                            <form method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="delete_member_id" value="{{ i.id }}">
-                                <input type="hidden" name="delete_member_email" value="{{ person.email }}">
-                                <button type="submit" class="btn btn-primary">Remove</button>
-                            </form>
-                        {% endfor %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width:25%">Name</th>
+                                    <th scope="col" style="width:60%">Email</th>
+                                    <th scope="col" style="width:15%">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for person in i.members.all %}
+                                <tr>
+                                    <td scope="row">{{ person.name }}</td>
+                                    <td>{{ person.email }}</td>
+                                    <td>
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="delete_member_id" value="{{ i.id }}">
+                                            <input type="hidden" name="delete_member_email" value="{{ person.email }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     {% else %}
                         <p>No members</p>
                     {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <h6>Add Member to Institution</h6> <br>
-                    <form method="POST">
-                        {% csrf_token %}
-                        <input type="email" name="email_user_add" placeholder="Member's Email">
-                        <button type="submit" class="btn btn-secondary">Add Member</button>
-                        <input type="hidden" name="institution_id_add_member" value="{{ i.id }}">
-                        <p>The user must have an account registered under this email.</p>
-                        <p>Once you click "Add Member," the user will be sent an invite to join your institution. They will not show up in your institution until they accept the invite.</p>
-                    </form>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="container">
+                        <div class="row">
+                            <h5>Add Member to Institution</h5>
+                        </div>
+                        <div class="row">
+                            <div class="card mb-2" style="border-radius: 0.5rem; background-color: #97d5f1;">
+                                <div class="card-body">
+                                    <div class="container">
+                                        The user must have an account registered under this email. Once you click "Add Member," the user will be sent an invite to join your institution. They will not show up in your institution until they accept the invite.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="email" class="form-control my-2" name="email_user_add" placeholder="Email">
+                                <button type="submit" class="btn btn-primary my-2">Add Member</button>
+                                <input type="hidden" name="institution_id_add_member" value="{{ i.id }}">
+                                <button type="button" class="btn btn-secondary my-2" data-bs-dismiss="modal">Close</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -140,11 +177,9 @@
                 <div class="modal-body">
                     <form method="POST" id="nameChangeForm">
                         {% csrf_token %}
-                        <input type="text" name="inst_name" placeholder="{{ i.name }}"> <br>
-                        <input type="checkbox" name="areyousure1" id="areyousure1" required>
-                        <label for="areyousure1">Are you sure you want to change the name of {{ i.name }}?</label> <br>
                         <input type="hidden" name="institution_id" value="{{ i.id }}">
-                        <button type="submit">Submit</button>
+                        <input type="text" class="form-control" name="inst_name" placeholder="{{ i.name }}"> <br>
+                        <button type="submit" class="btn btn-success">Change</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -169,11 +204,9 @@
                         {% csrf_token %}
                         <label for="areyousure1">Are you sure you want to delete {{ i.name }}?</label> <br>
                         <input type="hidden" name="institution_id_delete" value="{{ i.id }}">
-                        <button type="submit">Submit</button>
+                        <button type="submit" class="btn btn-success my-3 d-inline">Yes</button>
+                        <button type="button" class="btn btn-secondary my-3 d-inline" data-bs-dismiss="modal">Close</button>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
