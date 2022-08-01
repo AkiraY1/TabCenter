@@ -36,12 +36,12 @@ def home(request):
             year_tournament = ""
         attrs = [search_tournament, format_tournament, location_tournament, year_tournament]
         if attrs.count(attrs[0]) == len(attrs):
-            tourneys = Tournament.objects.filter(endDate__range=[date.today(), "2050-1-1"]).order_by("startDate")
+            tourneys = Tournament.objects.filter(endDate__range=[date.today(), "2050-1-1"], approved=True).order_by("startDate")
         else:
-            tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament), Q(location__icontains=location_tournament), Q(formats__icontains=format_tournament), Q(startDate__icontains=year_tournament)).order_by("-startDate")
+            tourneys = Tournament.objects.filter(Q(name__icontains=search_tournament), Q(location__icontains=location_tournament), Q(formats__icontains=format_tournament), Q(startDate__icontains=year_tournament), approved=True).order_by("-startDate")
     else:
         try:
-            tourneys = Tournament.objects.filter(endDate__range=[date.today(), "2050-1-1"]).order_by("startDate") #Remove - to reverse order
+            tourneys = Tournament.objects.filter(endDate__range=[date.today(), "2050-1-1"], approved=True).order_by("startDate") #Remove - to reverse order
         except:
             raise Http404("Error: No tournaments can be found.")
     #Pagination
@@ -283,6 +283,77 @@ def myTournaments(request):
 
 @login_required(login_url="/login")
 def createTournament(request):
-    #tournaments = 
-    #context = {"myTournaments": tournaments}
+    if request.method == "POST":
+        name = request.POST["TName"]
+        city = request.POST["TCity"]
+        province = request.POST["TProvince"]
+        startDate = request.POST["TstartDate"]
+        endDate = request.POST["TendDate"]
+        price = float(request.POST["Tprice"])
+        regReqs = request.POST["Treg"]
+        description = request.POST["Tdescrip"]
+        tournament_invite = request.POST["Tinvite"]
+        tabbycat_url = request.POST["Ttabby"]
+        online = request.POST.get("online")
+        if online == "on":
+            online = True
+        else:
+            online = False
+
+        #Formats
+        try:
+            cndf = (request.POST["cndf"], "CNDF")
+        except:
+            cndf = ("off", "cndf")
+
+        try:
+            bp = (request.POST["bp"], "BP")
+        except:
+            bp = ("off", "bp")
+
+        try:
+            world = (request.POST["world"], "World")
+        except:
+            world = ("off", "world")
+
+        try:
+            crossex = (request.POST["cross-ex"], "Cross-ex")
+        except:
+            crossex = ("off", "cross-ex")
+
+        try:
+            speech = (request.POST["speech"], "Speech")
+        except:
+            speech = ("off", "speech")
+
+        draft_formats = [cndf, bp, world, crossex, speech]
+        formats = [x[1] for x in draft_formats if (x[0] == "on")]
+
+        new_t = Tournament(
+            name=name,
+            startDate=startDate,
+            endDate=endDate,
+            location=province,
+            organizer=request.user,
+            formats=formats,
+            price=price,
+            online=online,
+            city=city,
+            tabbyCatLink=tabbycat_url,
+            invitationDocLink=tournament_invite,
+            registrationRequirements=regReqs,
+            description=description
+        )
+        new_t.save()
+
+        #Send notification email
+        send_mail(
+                'Tournament Submission',
+                f'New tournament awaiting approval called {name}',
+                'meadowridge.debate@gmail.com',
+                ['meadowridge.debate@gmail.com'],
+                fail_silently=False
+        )
+        return redirect('myTournaments')
+        
     return render(request, 'TabCenterApp/createTournament.html')

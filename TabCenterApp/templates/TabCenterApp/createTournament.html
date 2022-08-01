@@ -2,6 +2,158 @@
 
 {% block content %}
 
-Hello
+<div class="container py-3">
+    <div class="row">
+        <div class="col-1">
+                
+        </div>
+        <div class="col">
+            <div class="pb-3">
+                <h3>Create Tournament</h3>
+            </div>        
+        </div>
+        <div class="col-1">
+                
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+                
+        </div>
+        <div class="col">
+            <div class="card mb-3" style="border-radius: 0.5rem; background-color: #97d5f1;">
+                <div class="card-body">
+                    <div class="container">
+                        Hey there! Thank you for setting up a tournament with Copacetic Debate. Here are a couple of notes:
+                        <ul>
+                            <li>You must have a TabbyCat site for your tournament.</li>
+                            <li>Your tournament invitation must be accessible via a URL. Future updates will include support for uploading PDF/Word documents.</li>
+                            <li>The Copacetic Debate team will approve and list your tournament once it has been deemed authentic. You will be alerted via email.</li>
+                            <li>Once approved, head to your tournament's "Edit" page to open registration and make any changes.</li>
+                          </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-1">
+                
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+                
+        </div>
+        <div class="col">
+            <form class="row g-3 needs-validation" method="POST" novalidate>
+                {% csrf_token %}
+                <div class="col-12">
+                    <label for="tourname" class="form-label">Tournament Name</label>
+                    <input type="text" class="form-control" id="tourname" placeholder="Ex. Law Foundation Cup" name="TName" required>
+                </div>
+                <div class="col-md-7">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" placeholder="Ex. Victoria" name="TCity" required>
+                </div>
+                <div class="col-md-5">
+                    <label for="province" class="form-label">Region</label>
+                    <select id="province" class="form-select" name="TProvince" required>
+                        <option value="AB">Alberta</option>
+                        <option value="BC">British Columbia</option>
+                        <option value="MA">Maritimes</option>
+                        <option value="PR">Prairies</option>
+                        <option value="ON">Ontario</option>
+                        <option value="QB">Quebec</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="startDateInput" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="startDateInput" name="TstartDate" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="endDateInput" class="form-label">End Date</label>
+                    <input type="date" class="form-control" id="endDateInput" name="TendDate" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="priceTeam">Price (per team)</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">$CAD</span>
+                        <input type="number" step="0.01" min="0" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="Tprice" required>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Formats (select at least one)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="defaultCheck1" name="cndf">
+                        <label class="form-check-label" for="defaultCheck1">Canadian National Debate Format</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="defaultCheck2" name="bp">
+                        <label class="form-check-label" for="defaultCheck2">British Parliamentary</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="defaultCheck3" name="world">
+                        <label class="form-check-label" for="defaultCheck3">World Schools</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="defaultCheck4" name="cross-ex">
+                        <label class="form-check-label" for="defaultCheck4">Coss-Examination</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="defaultCheck5" name="speech">
+                        <label class="form-check-label" for="defaultCheck5">Speech Events</label>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <label for="regReqs" class="form-label">Registration Requirements</label>
+                    <textarea class="form-control" id="regReqs" rows="5" placeholder="List the requirements for debaters to register and for judges to register/be hired. Requirements might have to do with age, grade, experience, availability, etc." name="Treg" required></textarea>
+                </div>
+                <div class="col-12">
+                    <label for="regReqs" class="form-label">Tournament Description</label>
+                    <textarea class="form-control" id="regReqs" rows="5" placeholder="This description will be the first thing people see on your tournament page. We recommend you include the contact details of you and your fellow tournament organizers somewhere in this description." name="Tdescrip" required></textarea>
+                </div>
+                <div class="col-12">
+                    <label for="inviteLinkInput" class="form-label">Tournament Invitation URL</label>
+                    <input type="url" class="form-control" id="inviteLinkInput" placeholder="Ex. https://docs.google.com/document/d/1H46izGPzbB0tjs-5o0wTy5AdYF84bmYJ7_Y-S42mtuk/edit?usp=sharing" name="Tinvite" required>
+                </div>
+                <div class="col-12">
+                    <label for="tabbyLinkInput" class="form-label">TabbyCat Tournament URL</label>
+                    <input type="url" class="form-control" id="tabbyLinkInput" placeholder="Ex. https://mdr.calicotab.com/msdt2021j/" name="Ttabby" required>
+                </div>
+                <div class="form-check col-12">
+                    <input class="form-check-input" type="checkbox" id="defaultCheck100" name="online">
+                    <label class="form-check-label" for="defaultCheck100">Check if tournament will run virtually</label>
+                </div>
+                <div class="col-12 py-3">
+                    <button type="submit" class="btn btn-primary">Submit for Approval</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-1">
+                
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+        }, false)
+        })
+    })()
+</script>
 
 {% endblock content %}
