@@ -1,0 +1,100 @@
+{% extends "TabCenterApp/base.html" %}
+
+{% block content %}
+
+<div class="container py-3">
+    <div class="row">
+        <div class="col-1">
+                
+        </div>
+        <div class="col">
+            <div class="pb-3">
+                <h3>Registration</h3>
+            </div>  
+            <div class="card mb-3" style="border-radius: 0.5rem; background-color: #97d5f1;">
+                <div class="card-body">
+                    <div class="container">
+                        All other details, including institution name, debaters' emails, coach name, coach email and format will be submitted automatically as well.
+                    </div>
+                </div>
+            </div>      
+        </div>
+        <div class="col-1">
+                
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+                
+        </div>
+        <div class="col">
+            {% if coach_or_debater %}
+                <form class="row g-3" method="POST">
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        <label for="kiddo" class="form-label">Debater</label>
+                        <select id="kiddo" class="form-select" name="kid_id_1" required>
+                            {% for k in kids %}
+                                <option value="{{ k.id }}">{{ k.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="priceTeam">Grade</label>
+                        <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_1" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="kiddo" class="form-label">Debater</label>
+                        <select id="kiddo" class="form-select" name="kid_id_2" required>
+                            {% for k in kids %}
+                                <option value="{{ k.id }}">{{ k.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="priceTeam">Grade</label>
+                        <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_2" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            {% endif %}
+            {% if not coach_or_debater %}
+                <form class="row g-3" method="POST">
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        <label for="kiddo" class="form-label">Debater</label>
+                        <select id="kiddo" class="form-select" name="current_kiddo" disabled>
+                            <option value="{{ user_person.id }}">{{ user_person.name }}</option>
+                        </select>
+                        <input type="hidden" value="{{ user_person.id }}" name="kid_id_1">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="priceTeam">Grade</label>
+                        <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_1" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="kiddo" class="form-label">Debater</label>
+                        <select id="kiddo" class="form-select" name="kid_id_2" required>
+                            {% for k in kids %}
+                                <option value="{{ k.id }}">{{ k.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="priceTeam">Grade</label>
+                        <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_2" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+        <div class="col-1">
+                
+        </div>
+</div>
+
+{% endblock content %}

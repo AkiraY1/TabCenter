@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.template import loader
-from .models import Tournament, password_reset_code, Institution
+from .models import Tournament, password_reset_code, Institution, Entry
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -364,3 +364,58 @@ def createTournament(request):
         return redirect('myTournaments')
         
     return render(request, 'TabCenterApp/createTournament.html')
+
+###################################################################### Tournament Registration
+
+@login_required(login_url="/login")
+def registerTournament(request, tournament_id, coach_or_debater, institution_id, formats):
+    if request.method == "POST":
+        kid_id_1 = request.POST["kid_id_1"]
+        member1 = TabCenterUser.objects.get(id=kid_id_1)
+        kid_id_2 = request.POST["kid_id_2"]
+        member2 = TabCenterUser.objects.get(id=kid_id_2)
+        grade_1 = request.POST["grade_1"]
+        grade_2 = request.POST["grade_2"]
+        inst = Institution.objects.get(id=institution_id)
+
+        new_entry = Entry(member1=member1, member2=member2, member1_grade=grade_1, member2_grade=grade_2, institution=inst, formats=formats)
+        new_entry.save()
+        i = Tournament.objects.get(id=tournament_id)
+        i.entries.add(new_entry)
+        i.save()
+        return redirect("home")
+
+    kids = Institution.objects.get(id=institution_id).members.all
+    if coach_or_debater == 1:
+        coach_or_debater = True
+    else:
+        coach_or_debater = False
+    context = {"kids": kids, "coach_or_debater": coach_or_debater, "user_person": request.user}
+    return render(request, 'TabCenterApp/register_tournament.html', context)
+
+@login_required(login_url="/login")
+def registerSelect(request, tournament_id):
+    organizeInstitutions = TabCenterUser.objects.get(id=request.user.id).institution_set.all()
+    memberInstitutions = TabCenterUser.objects.get(id=request.user.id).part_of_institutions.all()
+    tournament_formats = Tournament.objects.get(id=tournament_id).formats
+    if request.method == "POST":
+        #Coach
+        if "institution_coach" in request.POST:
+            institution_id = request.POST["institution_coach"]
+            forma = request.POST["institution_format1"]
+            coach_or_debater = 1
+            
+        #Debater
+        if "institution_debater" in request.POST:
+            institution_id = request.POST["institution_debater"]
+            forma = request.POST["institution_format2"]
+            coach_or_debater = 0
+        
+        if Institution.objects.get(id=institution_id).members.count() < 2:
+            context = {"organizeInstitutions": organizeInstitutions, "memberInstitutions": memberInstitutions, "tournament_formats": tournament_formats, 'error': True}
+            return render(request, 'TabCenterApp/register_select.html', context)
+        
+        return redirect('registerTournament', tournament_id=tournament_id, coach_or_debater=coach_or_debater, institution_id=institution_id, formats=forma)
+
+    context = {"organizeInstitutions": organizeInstitutions, "memberInstitutions": memberInstitutions, "tournament_formats": tournament_formats, 'error': False}
+    return render(request, 'TabCenterApp/register_select.html', context)

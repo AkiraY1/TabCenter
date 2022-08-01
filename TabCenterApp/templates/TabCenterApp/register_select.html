@@ -1,0 +1,84 @@
+{% extends "TabCenterApp/base.html" %}
+
+{% block content %}
+
+<div class="container py-4 px-5">
+    <div class="row">
+        <div class="col">
+            <h3>Register as a Coach</h3>
+            <div class="card my-3" style="border-radius: 0.5rem; background-color: #97d5f1;">
+                <div class="card-body">
+                    <div class="container">
+                        Coaches can only register students under an institution they organize.
+                    </div>
+                </div>
+            </div>
+            <form method="POST" class="px-4">
+                {% csrf_token %}
+                <div class="col-12 py-2">
+                    <label for="institution_coach" class="form-label">Institution</label>
+                    <select id="institution_coach" class="form-select" name="institution_coach">
+                        {% for o in organizeInstitutions %}
+                        <option value="{{ o.id }}">{{ o.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 py-2">
+                    <label for="format-selector" class="form-label">Debate Style</label>
+                    <select id="format-selector" class="form-select" name="institution_format1">
+                        {% for f in tournament_formats %}
+                        <option value="{{ f }}">{{ f }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 py-2">
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </div>
+            </form>
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                This institution does not have enough debaters.
+            </div>
+            {% endif %}
+        </div>
+        <div class="col">
+            <h3>Register as a Debater</h3>
+            <div class="card my-3" style="border-radius: 0.5rem; background-color: #97d5f1;">
+                <div class="card-body">
+                    <div class="container">
+                        Debaters can only register under an institution they are a member of.
+                    </div>
+                </div>
+            </div>
+            <form method="POST" class="px-4">
+                {% csrf_token %}
+                <div class="col-12 py-2">
+                    <label for="institution_debater" class="form-label">Institution</label>
+                    <select id="institution_debater" class="form-select" name="institution_debater">
+                        {% for o in memberInstitutions %}
+                        <option value="{{ o.id }}">{{ o.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 py-2">
+                    <label for="format-selector" class="form-label">Debate Style</label>
+                    <select id="format-selector" class="form-select" name="institution_format2">
+                        {% for f in tournament_formats %}
+                        <option value="{{ f }}">{{ f }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 py-2">
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </div>
+            </form>
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                This institution does not have enough debaters.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

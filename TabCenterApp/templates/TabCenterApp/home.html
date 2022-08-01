@@ -82,7 +82,7 @@
                         </div>
                         <div class="col py-2">
                             {% if x.registration %}
-                            <button class="container-sm btn border border-success py-2" id="customregister"><a href="#" class="text-decoration-none text-success">Register</a></button>
+                            <a href="{% url 'registerSelect' x.id %}" class="text-decoration-none text-success"><button class="container-sm btn border border-success py-2" id="customregister">Register</button></a>
                             {% endif %}
                             {% if not x.registration %}
                             <button class="container-sm btn border border-dark py-2" disabled>Registration Closed</button>

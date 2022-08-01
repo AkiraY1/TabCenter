@@ -71,11 +71,11 @@ class Institution(models.Model):
 
 class Entry(models.Model):
     member1 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member1")
-    member1_grade = models.IntegerField("grade1")
+    member1_grade = models.IntegerField("grade1", null=True)
     member2 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member2")
-    member2_grade = models.IntegerField("grade2")
+    member2_grade = models.IntegerField("grade2", null=True)
     member3 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member3")
-    member3_grade = models.IntegerField("grade3")
+    member3_grade = models.IntegerField("grade3", null=True)
     institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=True, null=True)
     formats = models.CharField("format", max_length=255)
 
