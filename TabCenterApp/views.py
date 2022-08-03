@@ -368,18 +368,64 @@ def createTournament(request):
 ###################################################################### Tournament Registration
 
 @login_required(login_url="/login")
-def registerTournament(request, tournament_id, coach_or_debater, institution_id, formats):
-    if request.method == "POST":
-        kid_id_1 = request.POST["kid_id_1"]
-        member1 = TabCenterUser.objects.get(id=kid_id_1)
-        kid_id_2 = request.POST["kid_id_2"]
-        member2 = TabCenterUser.objects.get(id=kid_id_2)
-        grade_1 = request.POST["grade_1"]
-        grade_2 = request.POST["grade_2"]
-        inst = Institution.objects.get(id=institution_id)
+def registerTournament(request, tournament_id, coach_or_debater, institution_id, formats, number_debaters):
 
-        new_entry = Entry(member1=member1, member2=member2, member1_grade=grade_1, member2_grade=grade_2, institution=inst, formats=formats)
-        new_entry.save()
+    number_debaters_list = [i for i in range(1, number_debaters+1)]
+    number_debaters_list_debater = [i for i in range(2, number_debaters+1)]
+
+    if request.method == "POST":
+        inst = Institution.objects.get(id=institution_id)
+        if (formats.lower() == "cndf") or (formats.lower() == "bp") or (formats.lower() == "cross-ex"):
+            kid_id_1 = request.POST["kid_id_1"]
+            member1 = TabCenterUser.objects.get(id=kid_id_1)
+            kid_id_2 = request.POST["kid_id_2"]
+            member2 = TabCenterUser.objects.get(id=kid_id_2)
+            grade_1 = request.POST["grade_1"]
+            grade_2 = request.POST["grade_2"]
+
+            new_entry = Entry(member1=member1, member2=member2, member1_grade=grade_1, member2_grade=grade_2, institution=inst, formats=formats)
+            new_entry.save()
+        
+        if formats.lower() == "world":
+            kid_id_1 = request.POST["kid_id_1"]
+            member1 = TabCenterUser.objects.get(id=kid_id_1)
+            kid_id_2 = request.POST["kid_id_2"]
+            member2 = TabCenterUser.objects.get(id=kid_id_2)
+            kid_id_3 = request.POST["kid_id_3"]
+            member3 = TabCenterUser.objects.get(id=kid_id_3)
+            kid_id_4 = request.POST["kid_id_4"]
+            member4 = TabCenterUser.objects.get(id=kid_id_4)
+            kid_id_5 = request.POST["kid_id_5"]
+            member5 = TabCenterUser.objects.get(id=kid_id_5)
+            grade_1 = request.POST["grade_1"]
+            grade_2 = request.POST["grade_2"]
+            grade_3 = request.POST["grade_3"]
+            grade_4 = request.POST["grade_4"]
+            grade_5 = request.POST["grade_5"]
+
+            new_entry = Entry(
+                member1=member1, 
+                member2=member2, 
+                member3=member3, 
+                member4=member4, 
+                member5=member5, 
+                member1_grade=grade_1, 
+                member2_grade=grade_2, 
+                member3_grade=grade_3, 
+                member4_grade=grade_4, 
+                member5_grade=grade_5, 
+                institution=inst, 
+                formats=formats)
+            new_entry.save()
+        
+        if (formats.lower() == "speech"):
+            kid_id_1 = request.POST["kid_id_1"]
+            member1 = TabCenterUser.objects.get(id=kid_id_1)
+            grade_1 = request.POST["grade_1"]
+
+            new_entry = Entry(member1=member1, member1_grade=grade_1, institution=inst, formats=formats)
+            new_entry.save()
+        
         i = Tournament.objects.get(id=tournament_id)
         i.entries.add(new_entry)
         i.save()
@@ -390,7 +436,7 @@ def registerTournament(request, tournament_id, coach_or_debater, institution_id,
         coach_or_debater = True
     else:
         coach_or_debater = False
-    context = {"kids": kids, "coach_or_debater": coach_or_debater, "user_person": request.user}
+    context = {"kids": kids, "coach_or_debater": coach_or_debater, "user_person": request.user, "num_debaters_list":number_debaters_list, "num_debaters_list_debater":number_debaters_list_debater}
     return render(request, 'TabCenterApp/register_tournament.html', context)
 
 @login_required(login_url="/login")
@@ -411,11 +457,18 @@ def registerSelect(request, tournament_id):
             forma = request.POST["institution_format2"]
             coach_or_debater = 0
         
-        if Institution.objects.get(id=institution_id).members.count() < 2:
+        if (forma.lower() == "cndf") or (forma.lower() == "bp") or (forma.lower() == "cross-ex"):
+            num_debaters = 2
+        if forma.lower() == "world":
+            num_debaters = 5
+        if forma.lower() == "speech":
+            num_debaters = 1 #Fix number once real website is up
+        
+        if Institution.objects.get(id=institution_id).members.count() < num_debaters:
             context = {"organizeInstitutions": organizeInstitutions, "memberInstitutions": memberInstitutions, "tournament_formats": tournament_formats, 'error': True}
             return render(request, 'TabCenterApp/register_select.html', context)
         
-        return redirect('registerTournament', tournament_id=tournament_id, coach_or_debater=coach_or_debater, institution_id=institution_id, formats=forma)
+        return redirect('registerTournament', tournament_id=tournament_id, coach_or_debater=coach_or_debater, institution_id=institution_id, formats=forma, number_debaters=num_debaters)
 
     context = {"organizeInstitutions": organizeInstitutions, "memberInstitutions": memberInstitutions, "tournament_formats": tournament_formats, 'error': False}
     return render(request, 'TabCenterApp/register_select.html', context)

@@ -31,30 +31,20 @@
             {% if coach_or_debater %}
                 <form class="row g-3" method="POST">
                     {% csrf_token %}
-                    <div class="col-md-6">
-                        <label for="kiddo" class="form-label">Debater</label>
-                        <select id="kiddo" class="form-select" name="kid_id_1" required>
-                            {% for k in kids %}
-                                <option value="{{ k.id }}">{{ k.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="priceTeam">Grade</label>
-                        <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_1" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="kiddo" class="form-label">Debater</label>
-                        <select id="kiddo" class="form-select" name="kid_id_2" required>
-                            {% for k in kids %}
-                                <option value="{{ k.id }}">{{ k.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="priceTeam">Grade</label>
-                        <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_2" required>
-                    </div>
+                    {% for j in num_debaters_list %}
+                        <div class="col-md-6">
+                            <label for="kiddo" class="form-label">Debater</label>
+                            <select id="kiddo" class="form-select" name="kid_id_{{ j }}" required>
+                                {% for k in kids %}
+                                    <option value="{{ k.id }}">{{ k.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="priceTeam">Grade</label>
+                            <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_{{ j }}" required>
+                        </div>
+                    {% endfor %}
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
@@ -74,18 +64,20 @@
                         <label class="form-label" for="priceTeam">Grade</label>
                         <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_1" required>
                     </div>
-                    <div class="col-md-6">
-                        <label for="kiddo" class="form-label">Debater</label>
-                        <select id="kiddo" class="form-select" name="kid_id_2" required>
-                            {% for k in kids %}
-                                <option value="{{ k.id }}">{{ k.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="priceTeam">Grade</label>
-                        <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_2" required>
-                    </div>
+                    {% for p in num_debaters_list_debater %}
+                        <div class="col-md-6">
+                            <label for="kiddo" class="form-label">Debater</label>
+                            <select id="kiddo" class="form-select" name="kid_id_{{ p }}" required>
+                                {% for k in kids %}
+                                    <option value="{{ k.id }}">{{ k.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="priceTeam">Grade</label>
+                            <input type="number" step="1.0" min="0" max="12" class="form-control" aria-describedby="basic-addon1" id="priceTeam" name="grade_{{ p }}" required>
+                        </div>
+                    {% endfor %}
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>

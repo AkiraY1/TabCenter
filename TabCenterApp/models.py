@@ -76,6 +76,10 @@ class Entry(models.Model):
     member2_grade = models.IntegerField("grade2", null=True)
     member3 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member3")
     member3_grade = models.IntegerField("grade3", null=True)
+    member4 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member4")
+    member4_grade = models.IntegerField("grade3", null=True)
+    member5 = models.ForeignKey(TabCenterUser, on_delete=models.SET_NULL, blank=True, null=True, related_name="user_member5")
+    member5_grade = models.IntegerField("grade3", null=True)
     institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, blank=True, null=True)
     formats = models.CharField("format", max_length=255)
 
